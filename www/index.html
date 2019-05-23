@@ -53,6 +53,17 @@
       <li class="tab"><a href="#adicionar">Adicionar</a></li>
     </ul>
     <div id="contatos" class="section">
+        <div class="row">
+          <div class="input-field col s12">
+            <input
+              id="pesquisa"
+              type="search"
+              class="validate"
+              placeholder="Pesquisar"
+            />
+            <label for="nome">Nome</label>
+          </div>
+        </div>
       <table>
         <thead>
           <tr>
@@ -70,20 +81,20 @@
           <div class="row">
             <div class="input-field col s12">
               <input
-                id="first_name"
+                id="nome"
                 type="text"
                 class="validate"
               />
-              <label for="first_name">Nome</label>
+              <label for="nome">Nome</label>
             </div>
           </div>
           <div class="row">
             <div class="input-field col s12">
-              <input id="last_name" type="text" class="validate" />
-              <label for="last_name">Telefone</label>
+              <input id="telefone" type="text" class="validate" />
+              <label for="telefone">Telefone</label>
             </div>
           </div>
-          <a style="display: block" class="waves-effect waves-light btn">Adicionar</a>
+          <a style="display: block" id="btn-enviar" class="waves-effect waves-light btn">Adicionar</a>
         </form>
       </div>
     </div>
@@ -95,6 +106,14 @@
       app.initialize();
       $(document).ready(function() {
         $(".tabs").tabs();
+        $("#btn-enviar").click(function() {
+          app.salvaContato();
+        });
+        $('#pesquisa').keypress(e => {
+          if (e.which == '13') {
+            app.pesquisaContato();
+          }
+        });
       });
     </script>
   </body>

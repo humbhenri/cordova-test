@@ -36,9 +36,10 @@ var app = {
     app.listaContatos();
   },
 
-  listaContatos: function () {
+  listaContatos: function (pesquisa) {
     function onSuccess(contacts) {
-      $(contacts).each(function(index, value) {
+      $('tbody').html('');
+      $(contacts).each(function (index, value) {
         let conteudo = `<tr><td>${value.displayName}</td><td>${value.phoneNumbers[0].value}</td></tr>`;
         $('tbody').append(conteudo);
       });
@@ -48,8 +49,9 @@ var app = {
       console.log(JSON.stringify(contactError));
       alert(contactError);
     }
+
     var options = new ContactFindOptions();
-    // options.filter = "Bob";
+    options.filter = pesquisa || '';
     options.multiple = true;
     // options.desiredFields = [navigator.contacts.fieldType.id];
     options.hasPhoneNumber = true;
@@ -58,5 +60,31 @@ var app = {
       navigator.contacts.fieldType.phoneNumbers
     ];
     navigator.contacts.find(fields, onSuccess, onError, options);
-  }
+  },
+
+  salvaContato: function () {
+    let nome = $('#nome').val();
+    let telefone = $('#telefone').val();
+    let myContact = navigator.contacts.create({
+      'displayName': nome,
+      'phoneNumbers': [{
+        value: telefone
+      }]
+    });
+    myContact.save((contact) => {
+      alert('Contato adicionado com sucesso');
+      $('#nome').val('');
+      $('#telefone').val('');
+      app.listaContatos();
+    }, (error) => {
+      console.log(error);
+      alert('Erro ao adicionar o contato :(');
+    });
+  },
+
+  pesquisaContato: function () {
+    let pesquisa = $('#pesquisa').val();
+    app.listaContatos(pesquisa);
+    $('input').blur();
+  },
 };
